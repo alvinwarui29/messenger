@@ -3,8 +3,25 @@ import { Head, Link, router } from "@inertiajs/react";
 import React from "react";
 import Pagination from '../../Components/Pagination';
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "../Constants";
+import  TextInput  from '@/Components/TextInput';
+import SelectInput from "@/Components/SelectInput";
 
-const index = ({ auth, projects }) => {
+const index = ({ auth, projects, queryparams=null }) => {
+queryparams = queryparams ||{}
+
+const searchFieldChanged =(name,value)=>{
+  if(value){
+    queryparams[name]= value
+  }else{
+    delete  queryparams[name] 
+  }
+  router.get(route('project.index'),queryparams)
+};
+const onKeyPress = (name,e)=>{
+  if(e.key !== "Enter") return;
+  searchFieldChanged(name,e.target.value);
+}
+
   return (
     <Authenticated
       user={auth.user}
@@ -30,6 +47,28 @@ const index = ({ auth, projects }) => {
                   <th className="px-3">DUE_DATE</th>
                   <th className="px-3">CREATED_BY</th>
                   <th className="px-3 text-right">ACTIONS</th>
+                </thead>
+                <thead >
+                  <th className="px-3"></th>
+                  <th className="px-3"></th>
+                  <th className="px-3"> <TextInput className="w-full" defaultValue= {queryparams.name}
+                   onChange={e => searchFieldChanged('name',e.target.value)} 
+                    onKeyPress={e=> onKeyPress('name',e)}
+                   /> </th>
+                  <th className="px-3"> <SelectInput  className="w-full"
+                  defaultValue={queryparams.status}
+                  onChange={e=>searchFieldChanged('status',e.target.value)}
+                    
+                   >
+                    <option value="pending">Select status</option>
+                    <option value="pending">Pending</option>
+                    <option value="inProgress">In progress</option>
+                    <option value="completed">Completed</option>
+                   </SelectInput> </th>
+                  <th className="px-3"></th>
+                  <th className="px-3"></th>
+                  <th className="px-3"></th>
+                  <th className="px-3 "></th>
                 </thead>
                 <tbody>
                 {projects.data.map((project)=>(
