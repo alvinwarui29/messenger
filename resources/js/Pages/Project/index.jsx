@@ -55,8 +55,8 @@ const sortClicked = (name)=>{
               <div className="overflow-auto">
               <table className="w-full text-left" >
                 <thead   >
-                  <th onClick={(e) => sortClicked('id')} className="px-3"
-                   className="flex items-center justify-between gap-1 cursor-pointer">
+                  <th onClick={(e) => sortClicked('id')}
+                   className="px-3 flex items-center justify-between gap-1 cursor-pointer">
                   ID
                  <div>
                  <ChevronUpIcon className="w-4 cursor-pointer" />
