@@ -1,14 +1,13 @@
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import React from 'react'
+import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from "@inertiajs/react";
-import React from "react";
-import Pagination from '../../Components/Pagination';
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "../Constants";
 import  TextInput  from '@/Components/TextInput';
 import SelectInput from "@/Components/SelectInput";
 import {ChevronUpIcon, ChevronDownIcon} from '@heroicons/react/16/solid'
-
-const index = ({ auth, projects, queryparams=null }) => {
-queryparams = queryparams ||{}
+import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from '../Constants';
+import Pagination from './../../Components/Pagination';
+const Show = ({auth,project,tasks,queryparams}) => {
+    queryparams = queryparams ||{}
 
 const searchFieldChanged =(name,value)=>{
   if(value){
@@ -36,19 +35,17 @@ const sortClicked = (name)=>{
   }
   router.get(route('project.index'),queryparams)
 }
-
   return (
     <Authenticated
-      user={auth.user}
+    user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-          Projects
+          {`Project "${project.name}"`}
         </h2>
       }
     >
-      <Head title="Projects" />
-
-      <div className="py-12">
+     <Head title={`Project "${project.name}"`} />
+     <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
@@ -108,40 +105,37 @@ const sortClicked = (name)=>{
                   <th className="px-3 "></th>
                 </thead>
                 <tbody>
-                {projects.data.map((project)=>(
-                  <tr key={project.id}>
+                {tasks.data.map((task)=>(
+                  <tr key={task.id}>
                     <td className="px-3">
-                      {project.id}
+                      {task.id}
                     </td>
                     <td className="px-3">
-                    <img width='60px' className="p-3" src={project.image_path} alt="not found"/>
+                    <img width='60px' className="p-3" src={task.image_path} alt="not found"/>
                       
                     </td>
-                    <th className="px-3">
-                    <Link href={route('project.show',project.id)} className="text-gray-100 hover:underline text-nowrap">
-                      {project.name}
-
-                    </Link>
-                    </th>
                     <td className="px-3">
-                      <span className={"px-2 py-1 rounded text-white " + PROJECT_STATUS_CLASS_MAP[project.status]} >
-                        {PROJECT_STATUS_TEXT_MAP[project.status]}
+                      {task.name}
+                    </td>
+                    <td className="px-3">
+                      <span className={"px-2 py-1 rounded text-white " + TASK_STATUS_CLASS_MAP[task.status]} >
+                        {TASK_STATUS_TEXT_MAP[task.status]}
                       </span>
                     </td>
                     <td className="px-3">
-                      {project.created_at}
+                      {task.created_at}
                     </td>
                     <td className="px-3">
-                      {project.due_date}
+                      {task.due_date}
                     </td>
                     <td className="px-3">
-                      {project.createdBy.name}
+                    {/* {task.createdBy.name} */}
                     </td>
                     <td className="px-3">
-                      <Link href={route('project.edit',project.id)} className=" px-3 text-green-600">
+                      <Link href={route('task.edit',task.id)} className=" px-3 text-green-600">
                         Edit
                       </Link>
-                      <Link href={route('project.edit',project.id)} className="text-red-600">
+                      <Link href={route('task.edit',task.id)} className="text-red-600">
                         Delete
                       </Link>
                     </td>
@@ -166,13 +160,13 @@ const sortClicked = (name)=>{
                 </tbody>
               </table>
               </div>
-              <Pagination links={projects.meta.links}/>
+              {/* <Pagination links={tasks.meta.links}/> */}
             </div>
           </div>
         </div>
       </div>
     </Authenticated>
-  );
-};
+  )
+}
 
-export default index;
+export default Show
